@@ -15,7 +15,7 @@ public class InMemoryBookRepository implements BookRepository {
     private final AtomicLong idGenerator = new AtomicLong(1);
     
     public InMemoryBookRepository() {
-        // Füge einige Beispielücher hinzu
+        // Add some samples
         books.add(new Book(idGenerator.getAndIncrement(), "Clean Code", "Robert C. Martin"));
         books.add(new Book(idGenerator.getAndIncrement(), "Spring in Action", "Craig Walls"));
         books.add(new Book(idGenerator.getAndIncrement(), "Effective Java", "Joshua Bloch"));
@@ -38,15 +38,18 @@ public class InMemoryBookRepository implements BookRepository {
         if (book.getId() == null) {
             book.setId(idGenerator.getAndIncrement());
             books.add(book);
-        } else {
-            Optional<Book> existingBook = findById(book.getId());
-            if (existingBook.isPresent()) {
-                int index = books.indexOf(existingBook.get());
-                books.set(index, book);
-            } else {
-                books.add(book);
-            }
+            return book;
         }
+
+        // see if book with the given ID is present.
+        // If not, we handle this as a programming error
+        Optional<Book> existingBook = findById(book.getId());
+        if (!existingBook.isPresent()) {
+            throw new IllegalArgumentException("Book with ID " + book.getId() + " does not exist.");
+        }
+
+        int index = books.indexOf(existingBook.get());
+        books.set(index, book);
         return book;
     }
     
