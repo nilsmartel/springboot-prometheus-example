@@ -2,9 +2,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus,health,info
+        include: prometheus,health
   prometheus:
     metrics:
       export:
         enabled: true
     
+
+
+
