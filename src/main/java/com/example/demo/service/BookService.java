@@ -2,17 +2,28 @@ package com.example.demo.service;
 
 import com.example.demo.model.Book;
 import com.example.demo.repository.BookRepository;
-import lombok.RequiredArgsConstructor;
+
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class BookService {
     
     private final BookRepository bookRepository;
+    
+    public BookService(BookRepository bookRepository, MeterRegistry registry) {
+        this.bookRepository = bookRepository;
+
+        Gauge.builder("bookservice.books.count", () -> bookRepository.findAll().size())
+            .description("Total number of books")
+            .register(registry);
+    }
+
     
     public List<Book> getAll() {
         return bookRepository.findAll();
