@@ -7,6 +7,7 @@ Dieses Projekt demonstriert, wie Prometheus-Metriken in einem Spring Boot REST-S
 - Minimaler REST-Service mit Beispiel-Endpunkten
 - Integration von Spring Boot Actuator
 - Prometheus-kompatible Metriken unter `/actuator/prometheus`
+- Einbindung von eigenen Metriken
 
 ## Ziel
 
